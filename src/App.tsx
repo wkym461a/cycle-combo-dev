@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import reactLogo from '~/assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import '~/App.css'
+import { selectCount, increment } from '~/slices/counter'
+import { useAppDispatch, useAppSelector } from '~/app/hooks'
 
 function App() {
-  const [count, setCount] = useState(0)
+	const count = useAppSelector(selectCount);
+	const dispatch = useAppDispatch();
 
   return (
     <>
@@ -18,7 +20,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => dispatch(increment())}>
           count is {count}
         </button>
         <p>
