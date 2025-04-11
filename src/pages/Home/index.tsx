@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -15,13 +15,18 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import MatchTimerDialog from './MatchTimerDialog';
-import NewVersionModal from '~/components/NewVersionModal';
 
 import { useTimer } from '~/contexts/timer';
 import { useMatches } from '~/contexts/matches';
-import { getCurrentVersion, useVersion } from '~/contexts/version';
 
 const TIMER_SELECT_LIST = [...Array(10)].map((_, i) => i+1);
+
+const getCurrentVersion = (): string => {
+	return import.meta.env.VITE_VERSION;
+}
+const getCurrentRevision = (): string => {
+	return import.meta.env.VITE_REVISION;
+}
 
 function Home() {
 	const [isOpenTimerDialog, setIsOpenTimerDialog] = useState(false);
@@ -31,7 +36,6 @@ function Home() {
 
 	const { setInitTimer, startTimer, stopTimer, resetTimer } = useTimer();
 	const { createMatches, clearMatches } = useMatches();
-	const { isUpdatedVersion, checkIsUpdatedVersion, clearIsUpdatedVersion } = useVersion();
 
 	function handleOpenTimerDialog() {
 		setInitTimer(Number(timer_min) * 60);
@@ -56,14 +60,6 @@ function Home() {
   function handlePeopleNumChange(event: SelectChangeEvent) {
     setPeopleNum(event.target.value);
   };
-
-	function handleCloseUpdatedModal() {
-		clearIsUpdatedVersion();
-	}
-
-	useEffect(() => {
-		checkIsUpdatedVersion();
-	}, []);
 
   return (
 		<>
@@ -131,7 +127,7 @@ function Home() {
 						<Typography
 							component='div'
 						>
-							ver. {getCurrentVersion()}
+							ver.{getCurrentVersion()} (r{getCurrentRevision()})
 						</Typography>
 					</Stack>
 				</Container>
@@ -140,11 +136,6 @@ function Home() {
 			<MatchTimerDialog
 				isOpen={isOpenTimerDialog}
 				onClose={handleCloseTimerDialog}
-			/>
-
-			<NewVersionModal
-				isOpen={isUpdatedVersion}
-				onClose={handleCloseUpdatedModal}
 			/>
 		</>
   )
