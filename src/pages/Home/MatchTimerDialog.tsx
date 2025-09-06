@@ -117,7 +117,7 @@ function MatchTimerDialog({ isOpen, onClose }: Props) {
 						Timer{(matches.length > 0) && ' & Match'}
 					</Typography>
 
-					{!((matches.length > 0) && isLandscape) &&
+					{(matches.length > 0) && !isLandscape &&
 					<IconButton
 						size="large"
 						edge="start"
