@@ -3,7 +3,6 @@ import { useTimer } from "~/contexts/timer";
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-// import CircularProgress from "@mui/material/CircularProgress";
 import Typograpy from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
@@ -20,7 +19,7 @@ const LANDSCAPE_CTRL_WIDTH = 144;
 let isLandscape = true;
 
 function MatchTimer() {
-	const { initTimer_s, timer_s, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
+	const { timer_s, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
 	const { matches, currentMatchIndex } = useMatches();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
