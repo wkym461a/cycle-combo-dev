@@ -18,6 +18,7 @@ import MatchTimerDialog from './MatchTimerDialog';
 
 import { useTimer } from '~/contexts/timer';
 import { useMatches } from '~/contexts/matches';
+import { useAudio } from '~/contexts/audio';
 
 const TIMER_SELECT_LIST = [...Array(10)].map((_, i) => i+1);
 
@@ -36,6 +37,7 @@ function Home() {
 
 	const { setInitTimer, startTimer, stopTimer, resetTimer } = useTimer();
 	const { createMatches, clearMatches } = useMatches();
+	const { playSilent } = useAudio();
 
 	function handleOpenTimerDialog() {
 		setInitTimer(Number(timer_min) * 60);
@@ -43,6 +45,8 @@ function Home() {
 		startTimer();
 
 		createMatches(Number(peopleNum));
+
+		playSilent();
 
 		setIsOpenTimerDialog(true);
 	}
