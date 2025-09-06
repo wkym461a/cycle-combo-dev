@@ -21,10 +21,12 @@ const initialState: State = {
 // 状態に対する操作の型
 type Action =
 	| { type: 'play' }
+	| { type: 'playSilent' }
 
 // 外部公開する操作
 type ExtAction = {
 	play: () => void,
+	playSilent: () => void,
 }
 
 // コンテキスト型（状態と公開操作の組み合わせ）
@@ -32,7 +34,7 @@ type AudioContextType = State & ExtAction;
 
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
-	case 'play':
+	case 'play': {
 		state.source?.stop();
 		state.source?.disconnect();
 		const source = audioContext.createBufferSource();
@@ -43,6 +45,22 @@ const reducer = (state: State, action: Action): State => {
 			...state,
 			source,
 		}
+	}
+	case 'playSilent': {
+		state.source?.stop();
+		state.source?.disconnect();
+		const source = audioContext.createBufferSource();
+		source.buffer = audioData;
+		const gainNode = audioContext.createGain();
+		gainNode.gain.value = 0;
+		source.connect(gainNode);
+		gainNode.connect(audioContext.destination);
+		source.start(0);
+		return {
+			...state,
+			source,
+		}
+	}
 	default:
 		return state;
 	}
@@ -51,6 +69,7 @@ const reducer = (state: State, action: Action): State => {
 const AudioContext = createContext<AudioContextType>({
 	...initialState,
 	play: () => {},
+	playSilent: () => {},
 });
 
 export const AudioProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren) => {
@@ -58,10 +77,12 @@ export const AudioProvider: React.FC<PropsWithChildren> = (props: PropsWithChild
 
 	// コンテキストのインスタンス生成
 	const play = () => dispatch({ type: 'play' });
+	const playSilent = () => dispatch({ type: 'playSilent' });
 	const value = useMemo<AudioContextType>(
 		() => ({
 			...state,
 			play,
+			playSilent,
 		}),
 		[state],
 	);
