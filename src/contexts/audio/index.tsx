@@ -21,12 +21,12 @@ const initialState: State = {
 // 状態に対する操作の型
 type Action =
 	| { type: 'play' }
-	| { type: 'playSilent' }
+	| { type: 'resume' }
 
 // 外部公開する操作
 type ExtAction = {
 	play: () => void,
-	playSilent: () => void,
+	resume: () => void,
 }
 
 // コンテキスト型（状態と公開操作の組み合わせ）
@@ -46,20 +46,9 @@ const reducer = (state: State, action: Action): State => {
 			source,
 		}
 	}
-	case 'playSilent': {
-		state.source?.stop();
-		state.source?.disconnect();
-		const source = audioContext.createBufferSource();
-		source.buffer = audioData;
-		const gainNode = audioContext.createGain();
-		gainNode.gain.value = 0;
-		source.connect(gainNode);
-		gainNode.connect(audioContext.destination);
-		source.start(0);
-		return {
-			...state,
-			source,
-		}
+	case 'resume': {
+		audioContext.resume();
+		return state;
 	}
 	default:
 		return state;
@@ -69,7 +58,7 @@ const reducer = (state: State, action: Action): State => {
 const AudioContext = createContext<AudioContextType>({
 	...initialState,
 	play: () => {},
-	playSilent: () => {},
+	resume: () => {},
 });
 
 export const AudioProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren) => {
@@ -77,12 +66,12 @@ export const AudioProvider: React.FC<PropsWithChildren> = (props: PropsWithChild
 
 	// コンテキストのインスタンス生成
 	const play = () => dispatch({ type: 'play' });
-	const playSilent = () => dispatch({ type: 'playSilent' });
+	const resume = () => dispatch({ type: 'resume' });
 	const value = useMemo<AudioContextType>(
 		() => ({
 			...state,
 			play,
-			playSilent,
+			resume,
 		}),
 		[state],
 	);

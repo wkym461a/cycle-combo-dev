@@ -37,7 +37,7 @@ function Home() {
 
 	const { setInitTimer, startTimer, stopTimer, resetTimer } = useTimer();
 	const { createMatches, clearMatches } = useMatches();
-	const { playSilent } = useAudio();
+	const { resume } = useAudio();
 
 	function handleOpenTimerDialog() {
 		setInitTimer(Number(timer_min) * 60);
@@ -46,7 +46,7 @@ function Home() {
 
 		createMatches(Number(peopleNum));
 
-		playSilent();
+		resume();
 
 		setIsOpenTimerDialog(true);
 	}
