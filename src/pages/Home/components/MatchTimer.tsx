@@ -10,6 +10,10 @@ import ConfirmModal from "~/components/ConfirmModal";
 import MatchItem from "./MatchItem";
 import { useMatches } from "~/contexts/matches";
 
+type Props = {
+	isDrawerOpened: boolean,
+}
+
 const CONTENT_WIDTH = 120;
 const CONTENT_HEIGHT = 120;
 
@@ -18,7 +22,7 @@ const LANDSCAPE_CTRL_WIDTH = 144;
 
 let isLandscape = true;
 
-function MatchTimer() {
+function MatchTimer({ isDrawerOpened }: Props) {
 	const { timer_s, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
 	const { matches, currentMatchIndex } = useMatches();
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +38,8 @@ function MatchTimer() {
 			const rect = ref.current?.getBoundingClientRect();
 			let baseWidth = rect!.width;
 			let baseHeight = rect!.height;
-			isLandscape = (baseWidth >= baseHeight);
+			// isLandscape = (baseWidth >= baseHeight);
+			isLandscape = false;
 
 			if (isLandscape) {
 				baseWidth -= LANDSCAPE_CTRL_WIDTH;
@@ -98,6 +103,7 @@ function MatchTimer() {
 	return (
 		<Box
 			ref={ref}
+			width={(isDrawerOpened) ? 'calc(100% - 300px)' : '100%'}
 			height='100%'
 			sx={{ overflow: 'hidden' }}
 		>
