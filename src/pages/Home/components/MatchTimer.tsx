@@ -90,7 +90,7 @@ function MatchTimer({ isDrawerOpened }: Props) {
 			ref={ref}
 			width={(isDrawerOpened) ? 'calc(100% - 300px)' : '100%'}
 			height='100%'
-			sx={{ overflow: 'hidden', backgroundColor: 'red' }}
+			sx={{ overflow: 'hidden' }}
 		>
 			<Box
 				sx={{
@@ -111,7 +111,6 @@ function MatchTimer({ isDrawerOpened }: Props) {
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
-						backgroundColor: 'green',
 					}}
 				>
 					{/* タイマー */}
@@ -125,7 +124,7 @@ function MatchTimer({ isDrawerOpened }: Props) {
 					</Typograpy>
 
 					{(matches.length > 0) &&
-						<MatchItem match={matches[currentMatchIndex]} isContained={true} scale={scale * 0.635} />
+						<MatchItem match={matches[currentMatchIndex]} isContained={true} scale={scale * 0.625} />
 					}
 
 					{/* 再生・一時停止・キャンセルのボタン類 */}
