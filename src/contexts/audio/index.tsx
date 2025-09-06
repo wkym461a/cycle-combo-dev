@@ -2,8 +2,11 @@ import React, { createContext, PropsWithChildren, useContext, useMemo, useReduce
 import audio from '~/assets/timer.mp3';
 
 const audioContext = new window.AudioContext();
-const arrayBuffer = await fetch(audio).then(r => r.arrayBuffer());
-const audioData = await audioContext.decodeAudioData(arrayBuffer);
+let audioData: AudioBuffer | null = null;
+(async () => {
+	const arrayBuffer = await fetch(audio).then(r => r.arrayBuffer());
+	audioData = await audioContext.decodeAudioData(arrayBuffer);
+})();
 
 // 状態の型
 type State = {
